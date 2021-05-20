@@ -198,7 +198,7 @@ class InputHelper(object):
                     (nocidr and "/" in target_spec)
                 ):
                     str_targets.add(target_spec)
-                else:
+                elif re.match(r'^(((([0-9]{1,3}\.?){4}(-|/)[0-9]{1,3})|([0-9]{1,3}|\*)\.?){4})',target_spec):
                     if "-" in target_spec:
                         start_ip, post_dash_segment = target_spec.split("-")
                         end_ip = start_ip.rsplit(".", maxsplit=1)[0] + "." + \
@@ -215,6 +215,8 @@ class InputHelper(object):
                     for i in target_spec:
                         ips_list.append(str(i))
                     print(f"updating: {target_spec}")
+                else:
+                    str_targets.add(target_spec)
             return (str_targets, set(ips_list))
 
         str_targets, ipset_targets = parse_and_group_target_specs(
