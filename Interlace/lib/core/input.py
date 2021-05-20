@@ -198,7 +198,7 @@ class InputHelper(object):
                     (nocidr and "/" in target_spec)
                 ):
                     str_targets.add(target_spec)
-                elif re.match(r'^(((([0-9]{1,3}\.?){4}(-|/)[0-9]{1,3})|([0-9]{1,3}|\*)\.?){4})',target_spec):
+                elif arguments.ip_check:
                     if "-" in target_spec:
                         start_ip, post_dash_segment = target_spec.split("-")
                         end_ip = start_ip.rsplit(".", maxsplit=1)[0] + "." + \
@@ -437,6 +437,11 @@ class InputParser(object):
             help="Command timeout in seconds (DEFAULT:600)",
             default=600,
             type=lambda x: InputHelper.check_positive(parser, x)
+        )
+        
+        parser.add_argument(
+            '-ip', dest='ip_check', required=False,
+            help="parse ip",action='store_true'
         )
 
         parser.add_argument(
