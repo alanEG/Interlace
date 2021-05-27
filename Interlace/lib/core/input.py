@@ -182,29 +182,7 @@ class InputHelper(object):
             str_targets = set()
             ips_list = list()
             for target_spec in target_specs:
-                if (
-                    target_spec.startswith(".") or
-                    (target_spec[0].isalpha() or target_spec[-1].isalpha()) or
-                    (nocidr and "/" in target_spec)
-                ):
                     str_targets.add(target_spec)
-                else:
-                    if "-" in target_spec:
-                        start_ip, post_dash_segment = target_spec.split("-")
-                        end_ip = start_ip.rsplit(".", maxsplit=1)[0] + "." + \
-                            post_dash_segment
-                        target_spec = IPRange(start_ip, end_ip)
-                    elif "*" in target_spec:
-                        target_spec = glob_to_iprange(target_spec)
-                    else:  # str IP addresses and str CIDR notations
-                        if "/" in target_spec:
-                            target_spec = IPSet((target_spec,))
-                        else:
-                            target_spec = [target_spec]
-                    
-                    for i in target_spec:
-                        ips_list.append(str(i))
-                    print(f"updating: {target_spec}")
             return (str_targets, set(ips_list))
 
         str_targets, ipset_targets = parse_and_group_target_specs(
